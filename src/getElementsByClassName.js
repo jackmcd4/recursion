@@ -5,11 +5,41 @@
 
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function(className){/*works for everything except
-...if there are different element types. and isn't recursive yet*/ 
+...if there are different element types*/ 
   // your code here
+var result=[];
+ var isItHere = function(tag){
+	var children = tag.childNodes;
+  	for (var i=0; i < children.length; i++) {
+  		if(children[i].hasChildNodes()){
+  				isItHere(children[i]);
+  			}
+   		if(children[i].classList===undefined){
+  			continue;
+  		}
+		else if(children[i].classList.contains(className)){
+  			result.push(children[i]);
+  		}
+	}
+ }	
+isItHere(document.body);
+if(result!='undefined'){
+	result.unshift(document.body);
+}
+return result;
+}
+
+
+
+
+
+
+  /*
  var result=[];
- var body = document.body;
-  var children = body.childNodes;
+ if(tag===undefined){
+ tag = document.body;
+}
+  var children = tag.childNodes;
   for (var i=0; i < children.length; i++) {
   	if(children[i].classList===undefined){
   		continue;
@@ -19,11 +49,11 @@ var getElementsByClassName = function(className){/*works for everything except
   		}
   	}
   	if(result!=[]){
-  result.unshift(body);
+  result.unshift(tag);
 }
   return result;
 };
-
+*/
 /*var getElementsByClassName = function(className
 ){
   // your code here
