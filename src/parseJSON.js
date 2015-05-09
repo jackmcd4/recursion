@@ -16,7 +16,20 @@ var parseJSON = function(json) {
   		var arr = [];
   		var text;
   		for(var j=1; j<json.length-1; j++){
-  			if(json.charAt(j)!=='"'){
+  			if(json.charAt(j)==="\\"&&json.charAt(j+1)==="\\"){
+  				if(text===undefined){
+  					text="\\";
+  				}
+  				else{
+  					text+="\\"
+  				}
+  				j++;
+  			}
+  			else if(json.charAt(j)==="\\"&&json.charAt(j+1)==='"'){
+  				text+='"';
+  				j++;
+  			}
+  			else if(json.charAt(j)!=='"'){
   				if(json.charAt(j)!=="]"&&json.charAt(j)!=="}"){
   				if(text===undefined){
   			    		text=json.charAt(j);
@@ -59,6 +72,7 @@ var parseJSON = function(json) {
   					}
   				}
   			}
+  			
   		    	if(json.charAt(j)==='n'){//test for null
   					if(test(json.slice(j, j+4))){
   						arr.push(null);
