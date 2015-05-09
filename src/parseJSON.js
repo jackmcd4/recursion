@@ -34,7 +34,7 @@ var parseJSON = function(json) {
   		    }
   		    	if(json.charAt(j)==="["||json.charAt(j)==="{"){
   					for(var k=j; k<json.length-1; k++){
-  						if(json.charAt(k)==="}"){
+  						if(json.charAt(k)==="}"||json.charAt(k)==="]"){
   							var stop = k;
   							break;
   						}
@@ -88,13 +88,7 @@ var parseJSON = function(json) {
   		var isItKey=true;
   		for(var j=1; j<json.length-1; j++){
   		if(json.charAt(j)!=='"'){
-  			if(json.charAt(j)==="["||json.charAt(j)==="{"){
-  				val = parseJSON(json.slice(j, json.length-1));//2nd to 2nd to last char
-  				obj[key]=val;
-  				isItKey=true;
-  				j=json.length-1;
-  			}
-  			else if(isItKey===true){
+  			if(isItKey===true){
   			    val=undefined;
   			   		if(key===undefined){
   			        	key=json.charAt(j);
@@ -128,6 +122,24 @@ var parseJSON = function(json) {
   		else if(json.charAt(j)==='"' &&json.charAt(j+1)==='"'){
   			val="";
   		}
+  				if(json.charAt(j)==="["||json.charAt(j)==="{"){
+  					for(var k=j; k<json.length-1; k++){
+  						if(json.charAt(k)==="}"||json.charAt(k)==="]"){
+  							var stop = k;
+  							break;
+  						}
+  					}
+  					val = parseJSON(json.slice(j, k+1));//2nd to 2nd to last char
+  					obj[key]=val;
+  					isItKey=true;
+  					key=undefined;
+  					if(json.charAt(k+2)===" "){
+  						j=k+2;
+  					}
+  					else{
+  						j=k+1;
+  					}
+  				}
   				if(json.charAt(j)==='n' &&isItKey===false){
   					if(test(json.slice(j, j+4))){
   						obj[key]=null;
