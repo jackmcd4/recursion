@@ -17,12 +17,12 @@ var parseJSON = function(json) {
   		var text;
   		for(var j=1; j<json.length-1; j++){
   			if(json.charAt(j)!=='"'){
-  				
+  				if(json.charAt(j)!=="]"&&json.charAt(j)!=="}"){
   				if(text===undefined){
-  			    	text=json.charAt(j);
+  			    		text=json.charAt(j);
   				}
   				else{
-  					text+=json.charAt(j);
+  						text+=json.charAt(j);
   				}
   				if(json.charAt(j)===","&& text!==""){
   			    		arr.push(text.slice(0, text.length-1));
@@ -41,6 +41,7 @@ var parseJSON = function(json) {
   					}
   					var hold = parseJSON(json.slice(j, k+1));//2nd to 2nd to last char
   					arr.push(hold);
+  					text=undefined;
   					j=k+1;
   				}
   		    	if(typeof (+json.charAt(j))==='number'&&!isNaN(+json.charAt(j))&&json.charAt(j)!==(""||" ")){//test for numbers
@@ -57,6 +58,7 @@ var parseJSON = function(json) {
   						}
   					}
   				}
+  			}
   		    	if(json.charAt(j)==='n'){//test for null
   					if(test(json.slice(j, j+4))){
   						arr.push(null);
@@ -76,7 +78,9 @@ var parseJSON = function(json) {
   					}
   				}
   		    	if(j===json.length-2){
-  		        	arr.push(text);
+  		    		if(text!=undefined){
+  		        		arr.push(text);
+  		        	}
   		    	}
   		}
   	}
